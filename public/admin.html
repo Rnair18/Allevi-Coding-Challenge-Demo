@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Login</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm">
+        </div>
+        <div class="col-sm">
+          Admin Page
+        </div>
+        <div class="col-sm">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+        </div>
+        <div class="col-sm">
+          <label for="searchUser">Search User</label>
+          <input id="searchUser"></input>
+          <button id="seachUserButton" onclick="emitUser()">Search</button>
+
+        </div>
+        <div class="col-sm">
+        </div>
+      </div>
+      <div class="row">
+        <label for="userName">User Name</label>
+        <div class="col-sm">
+        <label id="userName"></label>
+        </div>
+      </div>
+      <div class="row">
+        <label for="critUse">Critical Usage</label>
+        <div class="col-sm">
+        <label id="critUse"></label>
+        </div>
+      </div>
+      <div class="row">
+        <label for="ext1">Extruder Type 1</label>
+        <div class="col-sm">
+        <label id="ext1"></label>
+        </div>
+      </div>
+      <div class="row">
+        <label for="ext2">Extruder Type 2</label>
+        <div class="col-sm">
+        <label id="ext2"></label>
+        </div>
+      </div>
+      <div class="row">
+        <label for="contact">Contact Information</label>
+        <div class="col-sm">
+        <label id="contact"></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="admin.js"></script>
+  </body>
+</html>
