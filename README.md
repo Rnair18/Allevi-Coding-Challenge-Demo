@@ -1,4 +1,3 @@
-![GitHub Logo](https://static1.squarespace.com/static/58ed365f20099e2bf03e0721/t/5a72265171c10bf970879fbf/1521683467932/?format=1500w)
 
 ## Introduction
 This web application was created for the Allevi Coding Challenge. The objective was to create a web application in about a week that would take into a json of print information and accordingly display valuable statistics about it in a meaningful way to both the client and internal team.
