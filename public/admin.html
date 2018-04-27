@@ -40,21 +40,9 @@
         </div>
       </div>
       <div class="row">
-        <label for="critUse">Critical Usage</label>
+        <label for="critUse">Dead Percent</label>
         <div class="col-sm">
         <label id="critUse"></label>
-        </div>
-      </div>
-      <div class="row">
-        <label for="ext1">Extruder Type 1</label>
-        <div class="col-sm">
-        <label id="ext1"></label>
-        </div>
-      </div>
-      <div class="row">
-        <label for="ext2">Extruder Type 2</label>
-        <div class="col-sm">
-        <label id="ext2"></label>
         </div>
       </div>
       <div class="row">
@@ -65,10 +53,22 @@
       </div>
       <div class="row">
           <button id="loadGraphButton" onclick="loadGraph()">Update Graph</button>
-        <div id="layerHeightChart"></div>
-        <div id="layerNumChart"></div>
-        <div id="livePercentChart"></div>
-        <div id="deadPercentChart"></div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <div id="layerHeightChart"></div>
+        </div>
+        <div class="col-sm">
+          <div id="layerNumChart"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <div id="livePercentChart"></div>
+        </div>
+        <div class="col-sm">
+          <div id="deadPercentChart"></div>
+        </div>
       </div>
     </div>
 

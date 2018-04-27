@@ -2,8 +2,6 @@ var searchButton = document.getElementById('searchUserButton');
 var userName = document.getElementById('searchUser');
 var userNameLabel = document.getElementById('userName');
 var critUse = document.getElementById('critUse');
-var ext1 = document.getElementById('ext1');
-var ext2 = document.getElementById('ext2');
 var contact = document.getElementById('contact');
 var criticalThreshold = 35;
 
@@ -12,8 +10,6 @@ var socket = io(); //initialize socket
 socket.on('updateStats', function(data)
 {
     userNameLabel.innerText = data.userName;
-    ext1.innerText = data.extruder1;
-    ext2.innerText = data.extruder2;
     contact.innerText = data.email;
     var critAverage = data.deadPercentSum / data.counter;
     critUse.innerText = critAverage;
@@ -61,7 +57,7 @@ function drawBarChart(dataArray, id, name)
         [[name, "Frequency"]].concat(dataArray));
 
     // Set chart options
-    var options = {'title':name + "Distribution",
+    var options = {'title':name + " Distribution",
                    'width':400,
                    'height':400};
 
@@ -78,9 +74,9 @@ function drawPieChart(dataArray, id, name)
         [[name, "Frequency"]].concat(dataArray));
 
     // Set chart options
-    var options = {'title':name + "Distribution",
-                   'width':200,
-                   'height':200};
+    var options = {'title':name + " Distribution",
+                   'width':400,
+                   'height':400};
 
     // Instantiate and draw our chart, passing in some options.
     var chart = new google.visualization.ScatterChart(document.getElementById(id));

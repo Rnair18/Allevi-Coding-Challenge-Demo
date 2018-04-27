@@ -44,6 +44,7 @@ var parseIntoDictionary = function()
 			newObject.email = email;
 			newObject.infile = [obj.print_info.files.input];
 			newObject.output= [obj.print_info.files.output];
+			newObject.userName = userName;
 			dict[userName] = newObject;
 		}
 	}
@@ -106,6 +107,16 @@ io.on('connection', function (socket)
 		var freqArray4 = convertToFrequencyDist(deadPercentArray, true);
 		socket.emit('updateGraph', freqArray1, freqArray2, freqArray3,
 		             freqArray4);
+	});
+
+	socket.on('userAuth', function(data)
+	{
+		if (data === "Admin") //will replace with something like passport.js
+		{
+			socket.emit('redirect', "/admin");
+		}
+
+
 	});
 });
 
