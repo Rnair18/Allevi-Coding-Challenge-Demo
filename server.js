@@ -19,10 +19,10 @@ var parseIntoDictionary = function()
 		var email = obj.user_info.email;
 		var userName = email.split('@')[0]; //user@gmail.com
 
-		livePrecentArray.push(obj.print_data.livePercent);
-		deadPrecentArray.push(obj.print_data.deadPercent);
+		livePercentArray.push(obj.print_data.livePercent);
+		deadPercentArray.push(obj.print_data.deadPercent);
 		layerHeightArray.push(obj.print_info.resolution.layerHeight);
-		layerNumArray.push(obj.print_info.resolution.layerHeight);
+		layerNumArray.push(obj.print_info.resolution.layerNum);
 
 		if (userName in dict) //update existing
 		{
@@ -49,6 +49,37 @@ var parseIntoDictionary = function()
 	}
 }
 
+var convertToFrequencyDist = function(arrayArg, roundFlag)
+{
+	var elements = [];
+	var freq = [];
+	var previous;
+	arrayArg.sort();
+	for (index = 0; index < arrayArg.length; index++)
+	{
+		if (roundFlag)
+		{
+			arrayArg[index] = Math.round(arrayArg[index]/5) * 5;
+		}
+		if (arrayArg[index] !== previous) //previous may be undefined
+		{
+			elements.push(arrayArg[index]);
+			freq.push(1);
+		}
+		else
+		{
+			freq[freq.length - 1]++;
+		}
+		previous = arrayArg[index];
+	}
+	var result = [];
+	for (index = 0; index < elements.length; index++)
+	{
+		result[index] = [elements[index], freq[index]];
+	}
+	return result; //elements with freq
+}
+
 var getData = function(userName)
 {
 	return dict[userName]; //could be undefined in invalid username
@@ -65,6 +96,16 @@ io.on('connection', function (socket)
 	{
 		var data = getData(userName);
 		socket.emit('updateStats', data);
+	});
+
+	socket.on('loadGraph', function()
+	{
+		var freqArray1 = convertToFrequencyDist(layerHeightArray, false);
+		var freqArray2 = convertToFrequencyDist(layerNumArray, false);
+		var freqArray3 = convertToFrequencyDist(livePercentArray, true);
+		var freqArray4 = convertToFrequencyDist(deadPercentArray, true);
+		socket.emit('updateGraph', freqArray1, freqArray2, freqArray3,
+		             freqArray4);
 	});
 });
 
