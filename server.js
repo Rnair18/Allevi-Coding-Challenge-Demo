@@ -1,16 +1,23 @@
+//modules that are required in the server
 var http = require('http');
 var routes = require('./routes.js');
 var express = require('express');
 var alleviData = require('./allevi-data.json'); //need streamer
 var socketIO = require('socket.io');
 
+//global data variables
 var port = 8000;
 var dict = {};
 var livePercentArray = [];
 var deadPercentArray = [];
 var layerHeightArray = [];
 var layerNumArray = [];
+var roundToNum = 5;
 
+/*
+Populates our dictionary and parses the json to now feature
+user search by grouping all objects with the same usernames
+*/
 var parseIntoDictionary = function()
 {
 	for (index = 0; index < alleviData.length; index++)
@@ -45,11 +52,16 @@ var parseIntoDictionary = function()
 			newObject.infile = [obj.print_info.files.input];
 			newObject.output= [obj.print_info.files.output];
 			newObject.userName = userName;
-			dict[userName] = newObject;
+			dict[userName] = newObject; //load Object into global dictionary
 		}
 	}
 }
 
+/*
+Takes a array of values and converts into a frequency distribution of
+[value, frequency]. Additionally for calculating the percent distribution
+it allows a parameter to round numbers, for easier visibility
+*/
 var convertToFrequencyDist = function(arrayArg, roundFlag)
 {
 	var elements = [];
@@ -58,9 +70,10 @@ var convertToFrequencyDist = function(arrayArg, roundFlag)
 	arrayArg.sort();
 	for (index = 0; index < arrayArg.length; index++)
 	{
-		if (roundFlag)
+		if (roundFlag) //round before calculating distribution
 		{
-			arrayArg[index] = Math.round(arrayArg[index]/5) * 5;
+			var value = arrayArg[index];
+			arrayArg[index] = Math.round(value/roundToNum) * roundToNum;
 		}
 		if (arrayArg[index] !== previous) //previous may be undefined
 		{
@@ -86,11 +99,13 @@ var getData = function(userName)
 	return dict[userName]; //could be undefined in invalid username
 }
 
+//Initialize our middleweare and set up routes
 var app = express();
 var server = http.Server(app);
 var io = socketIO.listen(server);
 routes(app);
 
+//Handle socket connections, @TODO modularize into separate socket.js
 io.on('connection', function (socket)
 {
 	socket.on('getUser', function(userName)
@@ -120,6 +135,6 @@ io.on('connection', function (socket)
 	});
 });
 
-parseIntoDictionary();
+parseIntoDictionary(); //initiate dictionary (blocking
 console.log("Starting port at %d", port);
-server.listen(port);
+server.listen(port); //start server

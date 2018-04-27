@@ -1,3 +1,5 @@
+//Handle app routing for different pages
+
 var fs = require('fs');
 var express = require('express');
 
@@ -23,7 +25,8 @@ module.exports = function(app)
 
     app.get('/user', function(req, res)
     {
-		res.sendFile('public/user.html', {root: __dirname});
+    	res.status(404).send('Not Found'); //@TODO implement user page
+		//res.sendFile('public/user.html', {root: __dirname});
     });
 
     app.post('/login', function(req, res)
