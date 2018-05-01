@@ -222,6 +222,7 @@ io.on('connection', function (socket)
 	socket.on('getUser', function(userName)
 	{
 		var data = getData(userName);
+		if (data == undefined) return; //ignore
 		var freq1 = convertToFrequencyDist(data.totalHeight, false);
 		var freq2 = convertToFrequencyDist(data.deadPercentList, true);
 		var freq3 = convertToFrequencyDist(data.livePercentList, true);
