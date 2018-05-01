@@ -37,7 +37,6 @@ socket.on('updateGraph', function(arr1, arr2, arr3, arr4)
     drawBarChart(arr2, "layerNumChart", "Layer Number");
     drawScatterChart(arr3, "livePercentChart", "Live Percent");
     drawScatterChart(arr4, "deadPercentChart", "Dead Percent");
-
 });
 
 

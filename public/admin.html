@@ -21,18 +21,44 @@
         <div class="col-sm">
         </div>
       </div>
+
       <div class="row">
         <div class="col-sm">
+          <label for="deadThreshold">Dead Threshold</label>
+          <input id="deadThreshold"></input>
         </div>
+        <div class="col-sm">
+        </div>
+        <div class="col-sm">
+          <label id="numJobs"># of Jobs</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm">
+          <label for="liveThreshold">Live Threshold</label>
+          <input id="liveThreshold"></input>
+        </div>
+        <div class="col-sm">
+        </div>
+        <div class="col-sm">
+          <label id="numActiveUser"># of Active Users</label>
+        </div>
+      </div>
+
+      <div class="row">
         <div class="col-sm">
           <label for="searchUser">Search User</label>
           <input id="searchUser"></input>
           <button id="seachUserButton" onclick="emitUser()">Search</button>
-
         </div>
         <div class="col-sm">
         </div>
+        <div class="col-sm">
+          <button id="searchedUser" onclick="loadSearchedUser()">Please search for a user</button>
+        </div>
       </div>
+
       <div class="row">
         <label for="userName">User Name</label>
         <div class="col-sm">
