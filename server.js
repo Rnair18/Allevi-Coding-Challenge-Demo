@@ -11,14 +11,20 @@ var port = 8000;
 var dict = {};
 var livePercentArray = [];
 var deadPercentArray = [];
-var layerHeightArray = [];
-var layerNumArray = [];
+var layerTotalHeightArray = [];
 var roundToNum = 5;
-var deadPercentThreshold = 30;
-var livePercentThreshold = 85;
+var deadPercentThreshold = 20; 
+var livePercentThreshold = 70; 
 var noCrossLinkingElasticity = [];
 var crossLinkingElasticity = [];
 var crossLinkingCharacteristics = [];
+var numJobs = 0;
+var numUsers = 0;
+
+/*
+Populates the corresponding global arrays for cross linking vs
+elasticity comparison
+*/
 
 var pushCrossLinkingVsElasticity = function(obj)
 {
@@ -42,14 +48,15 @@ var parseIntoDictionary = function()
 {
 	for (index = 0; index < alleviData.length; index++)
 	{
+		numJobs++;
 		var obj = alleviData[index];
 		var email = obj.user_info.email;
 		var userName = email.split('@')[0]; //user@gmail.com
 
 		livePercentArray.push(obj.print_data.livePercent);
 		deadPercentArray.push(obj.print_data.deadPercent);
-		layerHeightArray.push(obj.print_info.resolution.layerHeight);
-		layerNumArray.push(obj.print_info.resolution.layerNum);
+		layerTotalHeightArray.push(obj.print_info.resolution.layerHeight*
+			obj.print_info.resolution.layerNum);
 
 		pushCrossLinkingVsElasticity(obj);
 
@@ -69,6 +76,7 @@ var parseIntoDictionary = function()
 
 		else //add new key and object
 		{
+			numUsers++;
 			var newObject = {};
 			newObject.deadPercentSum = obj.print_data.deadPercent;
 			newObject.deadPercentList = [obj.print_data.deadPercent];
@@ -82,6 +90,7 @@ var parseIntoDictionary = function()
 			newObject.userName = userName;
 			newObject.totalHeight = [obj.print_info.resolution.layerHeight *
 			                         obj.print_info.resolution.layerNum];
+
 			dict[userName] = newObject; //load Object into global dictionary
 		}
 	}
@@ -124,11 +133,17 @@ var convertToFrequencyDist = function(arrayArg, roundFlag)
 	return result; //elements with freq
 }
 
+/*
+Returns the user object given a userName key
+*/
 var getData = function(userName)
 {
 	return dict[userName]; //could be undefined if invalid username
 }
 
+/*
+Calculates the average value within an array set of numbers
+*/
 var getAverage = function(arrayArg)
 {
 	var sum = 0;
@@ -139,22 +154,29 @@ var getAverage = function(arrayArg)
 	return Math.round(sum / arrayArg.length);
 }
 
+/*
+Calculates the standard deviation of a data set
+*/
 var stdDev = function(arrayArg, avg = getAverage(arrayArg))
 {
 	var sum = 0;
 	var arrLength = arrayArg.length;
 	for (index = 0; index < arrLength; index++)
 	{
-		sum += Math.pow((arrayArg[index] - avg, 2));
+		sum += (arrayArg[index] - avg) >> 1;
 	}
 	sum = sum/arrLength;
+	sum = Math.abs(sum);
 	return Math.round(Math.sqrt(sum));
 }
 
+/*
+Calculates correlation (covariance over multiplication of standard devs)
+of two arrays
+*/
 var correlation = function(arrayArg1, arrayArg2)
 {
-	var sum1 = 0;
-	var sum2 = 0;
+	var sum = 0;
 	var avg1 = getAverage(arrayArg1);
 	var avg2 = getAverage(arrayArg2);
 	var std1 = stdDev(arrayArg1, avg1);
@@ -165,16 +187,24 @@ var correlation = function(arrayArg1, arrayArg2)
 		return 0;
 	}
 
-	for (index = 0; index < arrayArg1.length; arrayArg++)
+	for (index = 0; index < arrayArg1.length; index++)
 	{
-		sum += (arrayArg1[index] - avg1) * (arrayArg2[index] - avg2);
+		sum += Math.round((arrayArg1[index] - avg1) * (arrayArg2[index] - avg2));
 	}
 	var covariance = sum / arrayArg1.length;
+	if (std1 * std2 == 0) return 0;
 	return covariance / (std1 * std2);
 }
 
+/*
+Enqueue the priority queue with every user from the dictionary
+*/
 var initQueue = function()
 {
+	while (!critPQ.isEmpty())
+	{
+		critPQ.deq();
+	}
 	for (key in dict)
 	{
 		critPQ.enq(key);
@@ -193,7 +223,12 @@ io.on('connection', function (socket)
 	socket.on('getUser', function(userName)
 	{
 		var data = getData(userName);
-		socket.emit('updateStats', data);
+		var freq1 = convertToFrequencyDist(data.totalHeight, false);
+		var freq2 = convertToFrequencyDist(data.deadPercentList, true);
+		var freq3 = convertToFrequencyDist(data.livePercentList, true);
+		var freq4 = convertToFrequencyDist(data.extruder1, false);
+		var freq5 = convertToFrequencyDist(data.extruder2, false);
+		socket.emit('showUser', data, freq1, freq2, freq3, freq4, freq5);
 	});
 
 	socket.on('loadGraph', function()
@@ -213,8 +248,45 @@ io.on('connection', function (socket)
 			socket.emit('redirect', "/admin");
 		}
 	});
+
+	socket.on('updateAllInfo', function()
+	{
+		//deadPercentThreshold = newDeadValue;
+		//livePercentThreshold = newLiveValue;
+		initQueue();
+		var freqArray1 = convertToFrequencyDist(livePercentArray, true);
+		var freqArray2 = convertToFrequencyDist(deadPercentArray, true);
+		var freqArray3 = convertToFrequencyDist(layerTotalHeightArray, true);
+		socket.emit('updateGraph', freqArray1, freqArray2, freqArray3);
+
+		var percentCrossLink = crossLinkingElasticity.length/livePercentArray.length;
+		percentCrossLink = Math.round(percentCrossLink*100);
+		var crossElasAvg = getAverage(crossLinkingElasticity);
+		var noCrossElasAvg = getAverage(noCrossLinkingElasticity);
+		socket.emit('updateCrossElas', percentCrossLink, crossElasAvg - noCrossElasAvg,
+			         numJobs, numUsers);
+
+		var users = [];
+		var firstUser = critPQ.peek();
+		critPQ.deq();
+		var secondUser = critPQ.peek();
+		critPQ.deq();
+		var thirdUser = critPQ.peek();
+		critPQ.deq();
+
+		users = [firstUser, secondUser, thirdUser];
+		critPQ.enq(firstUser);
+		critPQ.enq(secondUser);
+		critPQ.enq(thirdUser);
+		socket.emit('updateCritUsers', users);
+	});
 });
 
+/*
+Initializes a priority queue given this function as the compararator.
+The comparator categorizes the ranking based on separation from the threshold
+live and dead percent values.
+*/
 var critPQ = new PriorityQueue(function(a, b) {
 	userName1 = a;
 	userName2 = b;
@@ -241,21 +313,13 @@ var critPQ = new PriorityQueue(function(a, b) {
 			                - livePercentThreshold);
 	}
 
-	userDeadDist1 = getAverage(userDeadDist1);
-	userDeadDist2 = getAverage(userDeadDist2);
-	userLiveDist1 = getAverage(userLiveDist1);
-	userLiveDist2 = getAverage(userLiveDist2);
-
-	userRating1 = getAverage([userDeadDist1, userLiveDist1]);
-	userRating2 = getAverage([userDeadDist2, userLiveDist2]);
-
-	return userRating1 - userRating2;
+	var corr1 = correlation(userDeadDist1, userDeadDist2);
+	var corr2 = correlation(userLiveDist1, userLiveDist2);
+	return getAverage([corr1, corr2]);
 
 });
 
-parseIntoDictionary(); //initiate dictionary (blocking
+parseIntoDictionary(); //initiate dictionary (blocking)
 initQueue();
-critPQ.deq();
-console.log(critPQ.peek());
 console.log("Starting port at %d", port);
 server.listen(port); //start server

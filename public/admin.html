@@ -16,7 +16,7 @@
         <div class="col-sm">
         </div>
         <div class="col-sm">
-          Admin Page
+          <button onclick="updateAll()">Admin Page Update</button>
         </div>
         <div class="col-sm">
         </div>
@@ -24,8 +24,6 @@
 
       <div class="row">
         <div class="col-sm">
-          <label for="deadThreshold">Dead Threshold</label>
-          <input id="deadThreshold"></input>
         </div>
         <div class="col-sm">
         </div>
@@ -36,8 +34,6 @@
 
       <div class="row">
         <div class="col-sm">
-          <label for="liveThreshold">Live Threshold</label>
-          <input id="liveThreshold"></input>
         </div>
         <div class="col-sm">
         </div>
@@ -50,7 +46,6 @@
         <div class="col-sm">
           <label for="searchUser">Search User</label>
           <input id="searchUser"></input>
-          <button id="seachUserButton" onclick="emitUser()">Search</button>
         </div>
         <div class="col-sm">
         </div>
@@ -60,40 +55,95 @@
       </div>
 
       <div class="row">
-        <label for="userName">User Name</label>
         <div class="col-sm">
-        <label id="userName"></label>
+          <label>Critical Users Priority</label>
+        </div>
+        <div class="col-sm">
+          <label id="firstUser">1. </label>
+        </div>
+        <div class="col-sm">
+          <label id="secondUser">2. </label>
+        </div>
+        <div class="col-sm">
+          <label id="thirdUser">3. </label>
         </div>
       </div>
+
       <div class="row">
-        <label for="critUse">Dead Percent</label>
         <div class="col-sm">
-        <label id="critUse"></label>
+          <label for="crossElas">% Crosslinking Used</label>
+          <label id="crossElas"></label>
+        </div>
+        <div class="col-sm">
+          <label for="effect">Effectiveness</label>
+          <label id="effect"></label>
         </div>
       </div>
+
       <div class="row">
-        <label for="contact">Contact Information</label>
+       <div class="col-sm">
+         <div id="livePercentChart"></div>
+       </div>
+       <div class="col-sm">
+         <div id="deadPercentChart"></div>
+       </div>
+       <div class="col-sm">
+         <div id="layerHeightChart"></div>
+       </div>
+      </div>
+     </div>
+
+      <div class="row">
         <div class="col-sm">
-        <label id="contact"></label>
+          <div id="totalHeightBar"></div>
+        </div>
+        <div class="col-sm">
+          <div id="extruder1Scatter"></div>
+        </div>
+        <div class="col-sm">
+          <div id="extruder2Scatter"></div>
         </div>
       </div>
-      <div class="row">
-          <button id="loadGraphButton" onclick="loadGraph()">Update Graph</button>
-      </div>
+    </div>
+
       <div class="row">
         <div class="col-sm">
-          <div id="layerHeightChart"></div>
-        </div>
-        <div class="col-sm">
-          <div id="layerNumChart"></div>
+          <select id="infiles"></select>
         </div>
       </div>
+
       <div class="row">
         <div class="col-sm">
-          <div id="livePercentChart"></div>
+          <select id="outfiles"></select>
+        </div>
+      </div>
+    </div>
+
+      <div class="row">
+        <div class="col-sm">
+          <label id="email"></label>
+        </div>
+      </div>
+    </div>
+
+      <div class="row">
+        <div class="col-sm">
+          <div id="userHeight"></div>
         </div>
         <div class="col-sm">
-          <div id="deadPercentChart"></div>
+          <div id="userDeadPercent"></div>
+        </div>
+        <div class="col-sm">
+          <div id="userLivePercent"></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm">
+          <div id="extruderBar1"></div>
+        </div>
+        <div class="col-sm">
+          <div id="extruderBar2"></div>
         </div>
       </div>
     </div>
