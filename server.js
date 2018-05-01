@@ -25,7 +25,6 @@ var numUsers = 0;
 Populates the corresponding global arrays for cross linking vs
 elasticity comparison
 */
-
 var pushCrossLinkingVsElasticity = function(obj)
 {
 	if (obj.print_info.crosslinking.cl_enabled == false)

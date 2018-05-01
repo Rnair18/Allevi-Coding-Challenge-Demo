@@ -18,16 +18,24 @@ To start the server locally
 ```javascript
 node server.js
 ```
-And navigate a webrowser to http://localhost:8000
+And navigate a web browser to http://localhost:8000
+
+From here the login page is a work in progress, so simply enter "Admin" into the username field and press the button to load the admin page. Upon this page, the button on the top loads the graphs of the overall data collection in the middle while the search options loads the graphs of the specific user at the bottom.
+
+Do note that effectiveness of cross linking was calculated by comparing to a corresponding increase in elasticity. See https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5460858/ and https://www.sciencedirect.com/science/article/pii/S175161611830047X for further details. Need to discuss with team for verification if this analysis is correct.
 
 ## List of development features
 - Implement secure login with https (page setup, need to write backend)
 - Data parse the json into a dictionary with user key (completed)
 - Generate frequency distribution charts based of array values (completed)
 - Load custom user page to display print information of only specific user (not started)
+- Develop correlation function to use as comparison for priority queue (completed, needs further testing)
 - Load admin page to allow search for a user and overall statistics (completed)
 - Allow user uploads and internal team feedback with infile/outfile (not started)
-- Organization and planning of frontend layout and design (not started)
+- Organization and planning of frontend layout and design (in progress)
+- Critical priority queue that ranks critical users (completed)
+- Troubleshoot files with selection upon searching for a user (completed)
+- Detailed graphs for overall statistics in the middle of page, user specific results show up at the bottom (completed)
 
 Additionally the backend server parses additional information and sends it, but page does not render. Need to discuss with team to figure out optimal way to display info.
 
@@ -39,6 +47,3 @@ Please feel free to download, edit, and share. Give feedback in terms of additio
 
 Feel free to contact me at roshanair1620@gmail.com
 Thanks!
-
-
-

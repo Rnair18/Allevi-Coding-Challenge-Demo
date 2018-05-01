@@ -42,7 +42,7 @@ socket.on('updateCrossElas', function(percentCrossLink, difference, numJobs, num
     document.getElementById('crossElas').innerText = percentCrossLink;
     document.getElementById('effect').innerText = difference;
     document.getElementById('numJobs').innerText = "# of Jobs: " + numJobs;
-    document.getElementById('numActiveUser').innerText = "# of Jobs: " + numUsers;
+    document.getElementById('numActiveUser').innerText = "# of Users: " + numUsers;
 });
 
 socket.on('updateCritUsers', function(user)
@@ -71,6 +71,7 @@ socket.on('showUser', function(data, totalHeight, deadPercentArr,
     drawBarChart(extruderArr2, "extruderBar2", "Extruder 2 Distribution");
 });
 
+//dropdown files
 var addFilesDropDown = function(id, arrayArg)
 {
     var object = document.getElementById(id);
